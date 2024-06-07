@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .nav-bar{
+    background: black;
+    width: 90%;
+    height: 40px;
+    border-radius: 10px;
+}
+.nav-row{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.nav-col1{
+    width: 50%;
+    display: flex;
+    margin: 6px 50px;
+}
+
+.nav-col2{
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.nav-col2 a {
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+}
+
+.nav-col2 a:hover {
+    color: #ffcc00; /* Change to your desired hover color */
+    text-shadow: 0px 0px 10px 20px yellow;
+}
+
+#nav-logo a{
+    color:white;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+#nav-logo a {
+    transition: transform 0.3s ease-in-out;
+}
+
+#nav-logo a:hover {
+    transform: scale(1.1);
+}
+
+#nav-logo span{
+    padding-left: 10px;
+    font-size: 25px;
+    color:white;
+}
+
+#nav-location{
+    color: white;
+}
+#nav-login{
+    font-size: 18px;
+    margin: 8px;
+}
+
+#nav-login:hover{
+    text-shadow: 2px 2px 7px white;
+}
+
+#nav-login a{
+    color: white;
+    text-decoration: none;
+}
+
+#add-to-cart{
+    font-size: 18px;
+    margin: 8px;
+}
+
+#add-to-cart a{
+    color: white;
+    text-decoration: none;
+}
+
+#add-to-cart:hover{
+    text-shadow: 2px 2px 7px white;
+}
+
+    </style>
+</head>
+<body>
+    <section id="nav-bar">
+        <div class="nav-bar">
+            <div class="nav-row">
+                <div class="nav-col1">
+                    <div id="nav-logo">
+                        <a href="#"><i class="fas fa-utensils"></i>
+                            <span>Foodie</span></a>
+                    </div>
+                </div>
+                <div class="nav-col2">
+                    <div id="nav-login">
+                        <a href="login.html"><i class='bx bx-log-in-circle' ></i><span> Log-in</span></a>
+                    </div>
+                    <div id="add-to-cart">
+                        <a href="cart.html"><i class='bx bx-cart-alt'></i> Cart Items</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <header>
+        <h1 id="restaurant-name"></h1>
+    </header>
+    <main>
+        <section id="menu">
+            <!-- Menu will be dynamically loaded here -->
+        </section>
+    </main>
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

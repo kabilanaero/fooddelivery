@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px;
+        }
+        #cart-items {
+            flex: 1;
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .cart-item {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+        #checkout-form-container {
+            flex: 1;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #checkout-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #checkout-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .checkout-step {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cart</h1>
+    <div class="container">
+        <div id="cart-items"></div>
+        <div id="checkout-form-container">
+            <h2>Checkout</h2>
+            <div id="checkout-form">
+                <div class="checkout-step">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="checkout-step">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" required>
+                </div>
+                <div class="checkout-step">
+                    <label for="payment-method">Payment Method:</label>
+                    <select id="payment-method">
+                        <option value="credit-card">Credit Card</option>
+                        <option value="upi">UPI</option>
+                    </select>
+                </div>
+                <div id="credit-card-details" class="checkout-step" style="display: none;">
+                    <label for="card-number">Card Number:</label>
+                    <input type="text" id="card-number" required>
+                    <label for="card-expiry">Expiry Date (MM/YY):</label>
+                    <input type="text" id="card-expiry" required>
+                    <label for="card-cvv">CVV:</label>
+                    <input type="text" id="card-cvv" required>
+                </div>
+                <div id="upi-details" class="checkout-step" style="display: none;">
+                    <label for="upi-id">UPI ID:</label>
+                    <input type="text" id="upi-id" required>
+                </div>
+                <button id="confirm-order-button">Confirm Order</button>
+            </div>
+        </div>
+    </div>
+    <button id="checkout-button" disabled>Checkout</button>
+
+    <script>
+        // Function to display cart items
+        function showCart() {
+            const cart = JSON.parse(localStorage.getItem('cart'));
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.innerHTML = '';
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>No items in cart.</p>';
+            } else {
+                cart.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <p>${item.name} (Hotel ID: ${item.hotelId}) - Quantity: ${item.quantity} - Price: $${item.price * item.quantity}</p>
+                    `;
+                    cartItemsDiv.appendChild(itemDiv);
+                });
+            }
+            toggleCheckoutButton(cart.length > 0);
+        }
+
+        // Function to enable or disable checkout button
+        function toggleCheckoutButton(enable) {
+            document.getElementById('checkout-button').disabled = !enable;
+        }
+
+        // Call the function to display cart items when the page loads
+        document.addEventListener('DOMContentLoaded', showCart);
+
+        // Add event listener for checkout button
+        document.getElementById('checkout-button').addEventListener('click', function() {
+            document.getElementById('checkout-form-container').style.display = 'block';
+        });
+
+        // Add event listener for payment method change
+        document.getElementById('payment-method').addEventListener('change', function() {
+            const paymentMethod = this.value;
+            const creditCardDetails = document.getElementById('credit-card-details');
+            const upiDetails = document.getElementById('upi-details');
+
+            creditCardDetails.style.display = 'none';
+            upiDetails.style.display = 'none';
+
+            if (paymentMethod === 'credit-card') {
+                creditCardDetails.style.display = 'block';
+            } else if (paymentMethod === 'upi') {
+                upiDetails.style.display = 'block';
+            }
+        });
+
+        // Validate Credit Card details and detect card type
+        function validateCreditCard() {
+            const cardNumber = document.getElementById('card-number').value;
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+
+            const cardNumberPattern = /^\d{16}$/;
+            const cardExpiryPattern = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+            const cardCvvPattern = /^\d{3}$/;
+
+            if (!cardNumberPattern.test(cardNumber)) {
+                alert('Invalid card number. Please enter a valid 16-digit card number.');
+                return false;
+            }
+
+            if (!cardExpiryPattern.test(cardExpiry)) {
+                alert('Invalid expiry date. Please enter a valid expiry date in MM/YY format.');
+                return false;
+            }
+
+            if (!cardCvvPattern.test(cardCvv)) {
+                alert('Invalid CVV. Please enter a 3-digit CVV.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Validate UPI ID
+        function validateUpiId() {
+            const upiId = document.getElementById('upi-id').value;
+            const upiIdPattern = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+
+            if (!upiIdPattern.test(upiId)) {
+                alert('Invalid UPI ID. Please enter a valid UPI ID.');
+                return false;
+            }
+            return true;
+        }
+
+        // Function to confirm the order
+        function confirmOrder() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            if (!name) {
+                alert('Please enter your name.');
+                return;
+            }
+
+            if (!address) {
+                alert('Please enter your address.');
+                return;
+            }
+
+            if (paymentMethod === 'credit-card' && !validateCreditCard()) {
+                return;
+            }
+
+            if (paymentMethod === 'upi' && !validateUpiId()) {
+                return;
+            }
+
+            alert('Order confirmed. Thank you for your purchase!');
+            localStorage.removeItem('cart');
+            window.location.reload();
+        }
+
+        // Add event listener for confirming order button
+        document.getElementById('confirm-order-button').addEventListener('click', confirmOrder);
+    </script>
+</body>
+</html>

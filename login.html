@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="error-message" class="error-message"></div>
+        <div id="welcome-message" class="welcome-message"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('error-message');
+            const welcomeMessage = document.getElementById('welcome-message');
+
+            // Check if the user is already logged in
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                showWelcomeMessage(user.username);
+                loginForm.style.display = 'none'; // Hide the login form
+            }
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = loginForm.email.value;
+                const username = loginForm.username.value;
+                const password = loginForm.password.value;
+
+                // Validate email, username, and password (you can add more validation logic)
+                if (!email || !username || !password) {
+                    errorMessage.textContent = "Please enter all fields.";
+                    return;
+                }
+
+                // Here you would typically make an AJAX request to your server to authenticate the user
+                // Example:
+                // fetch('/login', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({ email, username, password })
+                // })
+                // .then(response => {
+                //     if (!response.ok) {
+                //         throw new Error('Invalid credentials');
+                //     }
+                //     return response.json();
+                // })
+                // .then(data => {
+                //     // Store user data in localStorage
+                //     localStorage.setItem('user', JSON.stringify(data.user));
+                //     showWelcomeMessage(data.user.username);
+                //     loginForm.style.display = 'none'; // Hide the login form
+                // })
+                // .catch(error => {
+                //     errorMessage.textContent = error.message;
+                // });
+
+                // For demonstration purposes, let's simulate a successful login
+                const simulatedUser = { email, username };
+                localStorage.setItem('user', JSON.stringify(simulatedUser));
+                showWelcomeMessage(username);
+                loginForm.style.display = 'none'; // Hide the login form
+            });
+
+            function showWelcomeMessage(username) {
+                welcomeMessage.textContent = `Welcome back, ${username}!`;
+            }
+        });
+    </script>
+</body>
+</html>

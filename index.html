@@ -1,0 +1,67 @@
+x<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery - Home</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+     <main>
+        <div id="welcome-message" class="welcome-message"></div>
+        <section id="hotels">
+            <div class="banner">
+                <video autoplay muted loop playsinline class="back-video">
+                    <source src="veg.mp4" type="video/mp4" >
+                </video>
+
+                <div class="nav-bar">
+                    <div class="nav-row">
+                        <div class="nav-col1">
+                            <div id="nav-logo">
+                                <a href="#"><i class="fas fa-utensils"></i>
+                                    <span>Foodie</span></a>
+                            </div>
+                        </div>
+                        <div class="nav-col2">
+                            <div id="nav-location">
+                                <button id="getLocationBtn">
+                                    <i class='bx bx-current-location'></i><span>Your Location</span>
+                                </button>
+                                <div id="restaurants"></div>
+                            </div>
+                            <div id="nav-login">
+                                <a href="login.html"><i class='bx bx-log-in-circle' ></i><span> Log-in</span></a>
+                            </div>
+                            <div id="add-to-cart">
+                                <a href="cart.html"><i class='bx bx-cart-alt'></i> Cart Items</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="content">
+        
+                <h1>Order Takeaway or Delivery Food
+                </h1>
+                <p>Ridiculus sociosqu cursus neque cursus curae ante scelerisque vehicula.
+
+                </p>
+
+                <form action=".search" method="get" class="search-form">
+                  <input type="text" id="search" name="q" placeholder="Search..." class="search-input">
+                  <button type="submit" class="search-button">Search</button>
+                </form>
+                        
+            </div>
+            </div>
+            <!-- Hotel list will be dynamically loaded here -->
+        </section>
+    </main>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
